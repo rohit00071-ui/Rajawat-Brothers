@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rajawat Brothers Store</title>
+<style>
+body{font-family:Arial;margin:0;background:#f4f4f4}
+header{background:#1b5e20;color:#fff;text-align:center;padding:15px}
+input,select{padding:10px;margin:10px;width:90%}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;padding:20px}
+.card{background:#fff;padding:10px;border-radius:10px}
+.card img{width:100%;height:120px;object-fit:cover}
+button{background:#2e7d32;color:#fff;border:none;padding:8px;width:100%;margin-top:5px}
+</style>
+<script>
+let products=[
+{name:'Milk',price:30,cat:'Dairy'},
+{name:'Atta',price:260,cat:'Atta'},
+{name:'Toor Dal',price:160,cat:'Dal'},
+{name:'Oil',price:140,cat:'Oil'}
+];
+let cart=[];
+function render(){
+let search=document.getElementById('search').value.toLowerCase();
+let cat=document.getElementById('cat').value;
+let html='';
+products.filter(p=>
+(!search||p.name.toLowerCase().includes(search)) &&
+(!cat||p.cat==cat)
+).forEach(p=>{
+html+=`<div class='card'>
+<img src='https://via.placeholder.com/150'>
+<h3>${p.name}</h3>
+<p>₹${p.price}</p>
+<button onclick="add('${p.name}',${p.price})">Add</button>
+</div>`});
+document.getElementById('list').innerHTML=html;
+}
+function add(n,p){cart.push({n,p});alert(n+' added')}
+function order(){
+let msg=cart.map(i=>i.n+' ₹'+i.p).join(', ');
+window.open(`https://wa.me/919636102436?text=Order: ${msg}`)
+}
+function adminAdd(){
+let n=prompt('Product Name');
+let p=prompt('Price');
+let c=prompt('Category');
+products.push({name:n,price:p,cat:c});
+render();
+}
+</script>
+</head>
+<body onload="render()">
+
+<header>
+<h1>RAJAWAT BROTHERS</h1>
+<p>Smart Grocery Store</p>
+</header>
+
+<center>
+<input id="search" placeholder="Search product" onkeyup="render()">
+<select id="cat" onchange="render()">
+<option value="">All Categories</option>
+<option>Atta</option>
+<option>Dairy</option>
+<option>Dal</option>
+<option>Oil</option>
+</select>
+</center>
+
+<div id="list" class="grid"></div>
+
+<center>
+<button onclick="order()">🛒 Order WhatsApp</button>
+<button onclick="adminAdd()">➕ Admin Add Product</button>
+</center>
+
+</body>
+</html>
